@@ -1,0 +1,330 @@
+import React, { useState } from "react";
+import {
+  Box,
+  Card,
+  CardContent,
+  Typography,
+  Grid,
+  useMediaQuery,
+  useTheme,
+  Modal,
+  Fade,
+} from "@mui/material";
+import { motion } from "framer-motion";
+import { 
+  HeroBannerA, 
+  MBBS, 
+  Nursing, 
+  Bpharma, 
+  Gnm, 
+  Pgdms 
+} from "../../assets";
+import StandaloneForm from "../PopupForm/PopupForm";
+
+interface Hospital {
+  id: number;
+  name: string;
+  description: string;
+  image: string;
+  redirectUrl: string;
+}
+
+const hospitals: Hospital[] = [
+  {
+    id: 1,
+    name: "IQ City Knowledge & Health campus",
+    description: "Comprehensive medical education with state-of-the-art facilities and experienced faculty.",
+    image: "https://iqcity.in/wp-content/uploads/2019/10/logo.png",
+    redirectUrl: "/iqcity.in",
+  },
+  {
+    id: 2,
+    name: "Gouri Devi Hospital & Research Institute",
+    description: "Professional nursing education with hands-on clinical training and modern healthcare practices.",
+    image: "https://gouridevihospitals.com/wp-content/uploads/2024/01/logo-3.png",
+    redirectUrl: "/gouridevihospitals.com",
+  },
+  {
+    id: 3,
+    name: "East West Institute of Medical Sciences & Research",
+    description: "Advanced pharmaceutical education focusing on drug development and healthcare solutions.",
+    image: "https://eastwestmedical.in/assets/BlackLogo-CpuD5bhO.png",
+    redirectUrl: "/eastwestmedical.in",
+  },
+  {
+    id: 4,
+    name: "Icare Institute of Medical Sciences",
+    description: "General Nursing and Midwifery program with comprehensive healthcare training.",
+    image: "https://icaremedicalcollege.in/assets/images/ICARE_LOGO.png",
+    redirectUrl: "/icaremedicalcollege.in",
+  },
+  {
+    id: 5,
+    name: "PG MD/MS",
+    description: "Postgraduate medical specialization programs with advanced clinical training.",
+    image: Pgdms,
+    redirectUrl: "/pgmdms",
+  },
+  {
+    id: 6,
+    name: "General Healthcare",
+    description: "Comprehensive healthcare services with modern medical facilities and expert care.",
+    image: HeroBannerA,
+    redirectUrl: "/programs",
+  },
+];
+
+const HospitalCards: React.FC = () => {
+  const [selectedHospital, setSelectedHospital] = useState<Hospital | null>(null);
+  const [modalOpen, setModalOpen] = useState(false);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isTablet = useMediaQuery(theme.breakpoints.between("sm", "md"));
+
+  const handleCardClick = (hospital: Hospital) => {
+    setSelectedHospital(hospital);
+    setModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalOpen(false);
+    setSelectedHospital(null);
+  };
+
+  const handleFormSubmit = () => {
+    if (selectedHospital) {
+      // Redirect to the hospital's URL after form submission
+      window.location.href = selectedHospital.redirectUrl;
+    }
+    handleCloseModal();
+  };
+
+  return (
+    <>
+      <Box
+        sx={{
+          width: "100%",
+          py: { xs: 4, sm: 5, md: 6, lg: 7 },
+          px: { xs: 1, sm: 2, md: 3, lg: 4 },
+          backgroundColor: "#f8f9fa",
+          minHeight: { xs: "auto", sm: "600px", md: "700px" },
+        }}
+      >
+        <Box
+          sx={{
+            maxWidth: "1600px",
+            margin: "0 auto",
+            width: "100%",
+          }}
+        >
+          <Grid
+            container
+            spacing={{ xs: 2, sm: 3, md: 4 }}
+            justifyContent="center"
+            sx={{
+              width: "100%",
+              margin: 0,
+            }}
+          >
+          {hospitals.map((hospital, index) => (
+            <Grid item xs={12} sm={6} md={4} key={hospital.id}>
+              <motion.div
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+              >
+                <Card
+                  sx={{
+                    height: { xs: 280, sm: 320, md: 350, lg: 380 },
+                    cursor: "pointer",
+                    position: "relative",
+                    overflow: "hidden",
+                    borderRadius: { xs: 2, sm: 3, md: 4 },
+                    boxShadow: "0 4px 20px rgba(0, 53, 179, 0.1)",
+                    border: "1px solid rgba(0, 53, 179, 0.05)",
+                    transition: "all 0.3s ease",
+                    "&:hover": {
+                      boxShadow: "0 8px 30px rgba(0, 53, 179, 0.2)",
+                      transform: "translateY(-4px)",
+                    },
+                  }}
+                  onClick={() => handleCardClick(hospital)}
+                >
+                  <Box
+                    sx={{
+                      position: "relative",
+                      height: "100%",
+                      display: "flex",
+                      flexDirection: "column",
+                      overflow: "hidden",
+                    }}
+                  >
+                    {/* Image Container */}
+                    <Box
+                      sx={{
+                        position: "relative",
+                        width: "100%",
+                        height: { xs: "180px", sm: "200px", md: "220px" },
+                        overflow: "hidden",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        backgroundColor: "#f8f9fa",
+                        padding: { xs: 1, sm: 1.5, md: 2 },
+                      }}
+                    >
+                      <Box
+                        component="img"
+                        src={hospital.image}
+                        alt={hospital.name}
+                        sx={{
+                          maxWidth: "100%",
+                          maxHeight: "100%",
+                          width: "auto",
+                          height: "auto",
+                          objectFit: "contain",
+                          objectPosition: "center",
+                          transition: "transform 0.3s ease, filter 0.3s ease",
+                          filter: "brightness(1) contrast(1.05)",
+                          imageRendering: "high-quality",
+                          WebkitImageRendering: "high-quality",
+                          MozImageRendering: "high-quality",
+                          msImageRendering: "high-quality",
+                          "&:hover": {
+                            transform: "scale(1.03)",
+                            filter: "brightness(1.05) contrast(1.1)",
+                          },
+                        }}
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.style.display = 'none';
+                        }}
+                        loading="lazy"
+                      />
+                    </Box>
+
+                    {/* Content Overlay - only for background effect if needed */}
+                    <Box
+                      sx={{
+                        position: "absolute",
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        background: "linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0.4), transparent)",
+                        height: "60%",
+                        pointerEvents: "none",
+                      }}
+                    />
+                    <CardContent
+                      sx={{
+                        position: "absolute",
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        zIndex: 2,
+                        color: "white",
+                        width: "100%",
+                        p: { xs: 2, sm: 2.5, md: 3 },
+                        background: "transparent",
+                      }}
+                    >
+                      <Typography
+                        variant={isMobile ? "h6" : isTablet ? "h5" : "h5"}
+                        component="h3"
+                        sx={{
+                          fontWeight: "bold",
+                          mb: { xs: 1, sm: 1.5 },
+                          fontSize: { xs: "1.1rem", sm: "1.3rem", md: "1.4rem" },
+                          textShadow: "0 2px 8px rgba(0, 0, 0, 0.8), 0 1px 4px rgba(0, 0, 0, 0.6)",
+                          lineHeight: { xs: 1.2, md: 1.3 },
+                        }}
+                      >
+                        {hospital.name}
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        sx={{
+                          opacity: 0.95,
+                          lineHeight: { xs: 1.4, md: 1.5 },
+                          fontSize: { xs: "0.85rem", sm: "0.9rem", md: "0.95rem" },
+                          textShadow: "0 2px 6px rgba(0, 0, 0, 0.8), 0 1px 3px rgba(0, 0, 0, 0.6)",
+                          display: "-webkit-box",
+                          WebkitLineClamp: { xs: 3, sm: 4 },
+                          WebkitBoxOrient: "vertical",
+                          overflow: "hidden",
+                        }}
+                      >
+                        {hospital.description}
+                      </Typography>
+                    </CardContent>
+                  </Box>
+                </Card>
+              </motion.div>
+            </Grid>
+          ))}
+        </Grid>
+        </Box>
+      </Box>
+
+      {/* Enhanced Lead Form Modal */}
+      <Modal
+        open={modalOpen}
+        onClose={handleCloseModal}
+        closeAfterTransition
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <Fade in={modalOpen}>
+          <Box
+            sx={{
+              position: "relative",
+              width: { xs: "95%", sm: "85%", md: "70%", lg: "60%", xl: "50%" },
+              maxWidth: { xs: "400px", sm: "500px", md: "600px" },
+              maxHeight: { xs: "90vh", sm: "85vh", md: "90vh" },
+              overflow: "auto",
+              bgcolor: "background.paper",
+              borderRadius: { xs: 2, sm: 3, md: 4 },
+              boxShadow: "0 8px 32px rgba(0, 53, 179, 0.2)",
+              border: "1px solid rgba(0, 53, 179, 0.1)",
+              outline: "none",
+            }}
+          >
+            <Box
+              sx={{
+                p: { xs: 2, sm: 2.5, md: 3 },
+                borderBottom: 1,
+                borderColor: "rgba(0, 53, 179, 0.1)",
+                background: "linear-gradient(135deg, #0035B3 0%, #002a8f 100%)",
+                borderRadius: { xs: "8px 8px 0 0", sm: "12px 12px 0 0", md: "16px 16px 0 0" },
+              }}
+            >
+              <Typography
+                variant={isMobile ? "h6" : "h5"}
+                component="h2"
+                textAlign="center"
+                sx={{
+                  color: "#ffffff",
+                  fontWeight: "600",
+                  fontSize: { xs: "1.1rem", sm: "1.2rem", md: "1.3rem" },
+                  textShadow: "0 1px 2px rgba(0, 0, 0, 0.2)",
+                }}
+              >
+                {selectedHospital?.name} - Inquiry Form
+              </Typography>
+            </Box>
+            <Box sx={{ p: { xs: 2, sm: 2.5, md: 3 } }}>
+              <StandaloneForm onSubmitSuccess={handleFormSubmit} />
+            </Box>
+          </Box>
+        </Fade>
+      </Modal>
+    </>
+  );
+};
+
+export default HospitalCards;
