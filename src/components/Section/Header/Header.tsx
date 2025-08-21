@@ -31,6 +31,7 @@ const Header: React.FC = () => {
           zIndex: 100,
           border: "1px solid rgba(0, 53, 179, 0.1)",
           borderTop: "none",
+          overflow: "hidden",
         }}
       >
         <Box
@@ -41,10 +42,10 @@ const Header: React.FC = () => {
             width: "100%",
             maxWidth: "1400px",
             margin: "0 auto",
-            px: { xs: 2, sm: 3, md: 4, lg: 5 },
-            py: { xs: 1.5, sm: 2, md: 2.5 },
-            minHeight: { xs: "70px", sm: "80px", md: "85px" },
-            gap: { xs: 2, sm: 3, md: 4 },
+            px: { xs: 0.3, sm: 1.2, md: 2.2, lg: 3.2 },
+            py: { xs: 0.8, sm: 1.2, md: 1.8 },
+            minHeight: { xs: "60px", sm: "70px", md: "80px" },
+            gap: { xs: 1, sm: 2, md: 3 },
           }}
         >
           {/* Enhanced Logo Section */}
@@ -53,14 +54,15 @@ const Header: React.FC = () => {
               display: "flex",
               alignItems: "center",
               cursor: "pointer",
-              padding: "8px 16px",
-              borderRadius: "15px",
+              padding: { xs: "6px 12px", sm: "8px 16px" },
+              borderRadius: { xs: "12px", sm: "15px" },
               background: "linear-gradient(135deg, #0035B3 0%, #002a8f 100%)",
-              boxShadow: "0 6px 20px rgba(0, 53, 179, 0.3)",
+              boxShadow: "0 4px 15px rgba(0, 53, 179, 0.25)",
               transition: "all 0.3s ease",
+              flexShrink: 0,
               "&:hover": {
-                transform: "translateY(-2px)",
-                boxShadow: "0 8px 25px rgba(0, 53, 179, 0.4)",
+                transform: "translateY(-1px)",
+                boxShadow: "0 6px 20px rgba(0, 53, 179, 0.35)",
               }
             }}
             onClick={() => window.location.href = "/"}
@@ -123,36 +125,38 @@ const Header: React.FC = () => {
             sx={{
               display: "flex",
               alignItems: "center",
-              gap: { xs: 1, sm: 1.5, md: 2 },
+              gap: { xs: 0.2, sm: 0.6, md: 1 },
               flexGrow: 1,
               justifyContent: "flex-end",
-              pr: { xs: 0.5, sm: 1, md: 1.5 },
+              pr: { xs: 0, sm: 0.2, md: 0.6 },
+              flexShrink: 1,
+              minWidth: { xs: "50px", sm: "75px", md: "95px" },
+              maxWidth: { xs: "55px", sm: "85px", md: "110px" },
             }}
           >
             {/* NEET Updates Button */}
             <Button
               onClick={() => window.location.href = "/neetupdates"}
-              startIcon={!isMobile ? <TrendingUpIcon /> : undefined}
               sx={{
-                background: "linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)",
-                color: "#0035B3",
-                fontWeight: "700",
+                background: "linear-gradient(135deg, #0035B3 0%, #002a8f 100%)",
+                color: "#ffffff",
+                fontWeight: "600",
                 fontSize: { xs: "0.7rem", sm: "0.8rem", md: "0.85rem" },
-                px: { xs: 2, sm: 2.5, md: 3 },
-                py: { xs: 1, sm: 1.2, md: 1.3 },
-                minWidth: { xs: "75px", sm: "110px", md: "130px" },
-                minHeight: { xs: "32px", sm: "38px", md: "42px" },
+                px: { xs: 1.5, sm: 2, md: 2.5 },
+                py: { xs: 0.8, sm: 1, md: 1.2 },
+                minWidth: { xs: "auto", sm: "auto", md: "auto" },
+                minHeight: { xs: "32px", sm: "36px", md: "40px" },
                 borderRadius: { xs: "8px", sm: "10px", md: "12px" },
                 textTransform: "none",
-                boxShadow: "0 3px 12px rgba(0, 53, 179, 0.25), 0 1px 4px rgba(0, 0, 0, 0.1)",
-                border: "2px solid rgba(0, 53, 179, 0.2)",
+                boxShadow: "0 3px 12px rgba(0, 53, 179, 0.3), 0 1px 4px rgba(0, 0, 0, 0.1)",
+                border: "1px solid rgba(255, 255, 255, 0.2)",
                 transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                gap: { xs: 0.3, sm: 0.5, md: 0.8 },
                 position: "relative",
                 overflow: "hidden",
+                flexShrink: 0,
                 "&:before": {
                   content: '""',
                   position: "absolute",
@@ -160,21 +164,21 @@ const Header: React.FC = () => {
                   left: "-100%",
                   width: "100%",
                   height: "100%",
-                  background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent)",
-                  transition: "left 0.5s",
+                  background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent)",
+                  transition: "left 0.6s",
                 },
                 "&:hover": {
-                  background: "linear-gradient(135deg, #0035B3 0%, #002a8f 100%)",
-                  color: "#ffffff",
-                  transform: "translateY(-1px) scale(1.02)",
-                  boxShadow: "0 5px 18px rgba(0, 53, 179, 0.4), 0 2px 8px rgba(0, 0, 0, 0.15)",
-                  border: "2px solid rgba(255, 255, 255, 0.3)",
+                  background: "linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)",
+                  color: "#0035B3",
+                  transform: "translateY(-2px)",
+                  boxShadow: "0 6px 20px rgba(0, 53, 179, 0.4), 0 2px 8px rgba(0, 0, 0, 0.15)",
+                  border: "1px solid rgba(0, 53, 179, 0.3)",
                   "&:before": {
                     left: "100%",
                   },
                 },
                 "&:active": {
-                  transform: "translateY(0) scale(0.98)",
+                  transform: "translateY(-1px)",
                 },
               }}
             >
@@ -182,7 +186,7 @@ const Header: React.FC = () => {
                 sx={{
                   display: "flex",
                   alignItems: "center",
-                  gap: { xs: 0.3, sm: 0.5, md: 0.8 },
+                  gap: { xs: 0.5, sm: 0.7, md: 0.8 },
                 }}
               >
                 {!isMobile && <TrendingUpIcon sx={{ fontSize: { sm: 16, md: 18 } }} />}
@@ -190,8 +194,10 @@ const Header: React.FC = () => {
                   sx={{
                     fontSize: "inherit",
                     fontWeight: "inherit",
-                    lineHeight: 1,
+                    lineHeight: 1.2,
                     letterSpacing: { xs: "0.3px", sm: "0.4px", md: "0.5px" },
+                    whiteSpace: "nowrap",
+                    fontFamily: "'Inter', 'Roboto', sans-serif",
                   }}
                 >
                   {isMobile ? "NEET" : "NEET Updates"}

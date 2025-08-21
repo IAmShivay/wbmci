@@ -11,14 +11,6 @@ import {
   Fade,
 } from "@mui/material";
 import { motion } from "framer-motion";
-import { 
-  HeroBannerA, 
-  MBBS, 
-  Nursing, 
-  Bpharma, 
-  Gnm, 
-  Pgdms 
-} from "../../assets";
 import StandaloneForm from "../PopupForm/PopupForm";
 
 interface Hospital {
@@ -60,17 +52,17 @@ const hospitals: Hospital[] = [
   },
   {
     id: 5,
-    name: "PG MD/MS",
+    name: "Sanakamedical",
     description: "Postgraduate medical specialization programs with advanced clinical training.",
-    image: Pgdms,
-    redirectUrl: "/pgmdms",
+    image: "https://sanakamedical.com/assets/Loader-BmSY7evn.svg",
+    redirectUrl: "/sanakamedical.com",
   },
   {
     id: 6,
-    name: "General Healthcare",
+    name: "KPC Medical College",
     description: "Comprehensive healthcare services with modern medical facilities and expert care.",
-    image: HeroBannerA,
-    redirectUrl: "/programs",
+    image: "https://images.shiksha.com/mediadata/images/1600746904phpQtmv9f.jpg",
+    redirectUrl: "/kpcmedicalcollege.in",
   },
 ];
 
@@ -82,8 +74,15 @@ const HospitalCards: React.FC = () => {
   const isTablet = useMediaQuery(theme.breakpoints.between("sm", "md"));
 
   const handleCardClick = (hospital: Hospital) => {
-    setSelectedHospital(hospital);
-    setModalOpen(true);
+    // Open external links in new tab
+    if (hospital.redirectUrl.startsWith('http') || hospital.redirectUrl.includes('.com') || hospital.redirectUrl.includes('.in')) {
+      const url = hospital.redirectUrl.startsWith('http') ? hospital.redirectUrl : `https://${hospital.redirectUrl.replace('/', '')}`;
+      window.open(url, '_blank', 'noopener,noreferrer');
+    } else {
+      // For internal routes, open modal
+      setSelectedHospital(hospital);
+      setModalOpen(true);
+    }
   };
 
   const handleCloseModal = () => {
