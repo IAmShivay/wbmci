@@ -9,6 +9,11 @@ import {
   useTheme,
   Modal,
   Fade,
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from "@mui/material";
 import { motion } from "framer-motion";
 import StandaloneForm from "../PopupForm/PopupForm";
@@ -69,18 +74,23 @@ const hospitals: Hospital[] = [
 const HospitalCards: React.FC = () => {
   const [selectedHospital, setSelectedHospital] = useState<Hospital | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
+  const [successDialogOpen, setSuccessDialogOpen] = useState(false);
+  const [hasSubmittedForm, setHasSubmittedForm] = useState(() => {
+    // Check if user has already submitted a form (stored in localStorage)
+    return localStorage.getItem('sanaka_lead_submitted') === 'true';
+  });
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const isTablet = useMediaQuery(theme.breakpoints.between("sm", "md"));
 
   const handleCardClick = (hospital: Hospital) => {
-    // Open external links in new tab
-    if (hospital.redirectUrl.startsWith('http') || hospital.redirectUrl.includes('.com') || hospital.redirectUrl.includes('.in')) {
-      const url = hospital.redirectUrl.startsWith('http') ? hospital.redirectUrl : `https://${hospital.redirectUrl.replace('/', '')}`;
-      window.open(url, '_blank', 'noopener,noreferrer');
+    setSelectedHospital(hospital);
+
+    // If user has already submitted a form, show success popup directly
+    if (hasSubmittedForm) {
+      setSuccessDialogOpen(true);
     } else {
-      // For internal routes, open modal
-      setSelectedHospital(hospital);
+      // First time user - show the form modal
       setModalOpen(true);
     }
   };
@@ -91,11 +101,17 @@ const HospitalCards: React.FC = () => {
   };
 
   const handleFormSubmit = () => {
-    if (selectedHospital) {
-      // Redirect to the hospital's URL after form submission
-      window.location.href = selectedHospital.redirectUrl;
-    }
+    // Mark user as having submitted a form (store in localStorage)
+    localStorage.setItem('sanaka_lead_submitted', 'true');
+    setHasSubmittedForm(true);
+
+    // Close the form modal and show success dialog
     handleCloseModal();
+    setSuccessDialogOpen(true);
+  };
+
+  const handleCloseSuccessDialog = () => {
+    setSuccessDialogOpen(false);
   };
 
   return (
@@ -322,6 +338,111 @@ const HospitalCards: React.FC = () => {
           </Box>
         </Fade>
       </Modal>
+
+      {/* Success Dialog */}
+      <Dialog
+        open={successDialogOpen}
+        onClose={handleCloseSuccessDialog}
+        maxWidth="sm"
+        fullWidth
+        PaperProps={{
+          sx: {
+            borderRadius: "16px",
+            boxShadow: "0 8px 32px rgba(0, 0, 0, 0.12)",
+            background: "linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)",
+          },
+        }}
+      >
+        <DialogTitle
+          sx={{
+            textAlign: "center",
+            pb: 1,
+            pt: 3,
+            px: 3,
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: 2,
+            }}
+          >
+            <Box
+              sx={{
+                width: 64,
+                height: 64,
+                borderRadius: "50%",
+                background: "linear-gradient(135deg, #4CAF50 0%, #45a049 100%)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                boxShadow: "0 4px 16px rgba(76, 175, 80, 0.3)",
+              }}
+            >
+              <Typography
+                sx={{
+                  fontSize: "2rem",
+                  color: "white",
+                }}
+              >
+                ✓
+              </Typography>
+            </Box>
+            <Typography
+              variant="h5"
+              sx={{
+                fontWeight: "600",
+                color: "#2E7D32",
+                textAlign: "center",
+              }}
+            >
+              Thank You!
+            </Typography>
+          </Box>
+        </DialogTitle>
+        <DialogContent sx={{ px: 3, pb: 2 }}>
+          <Typography
+            variant="body1"
+            sx={{
+              textAlign: "center",
+              color: "#555",
+              fontSize: "1.1rem",
+              lineHeight: 1.6,
+            }}
+          >
+            {hasSubmittedForm && modalOpen === false
+              ? "Thank you for your interest! Our executive will contact you soon regarding your previous inquiry."
+              : "Your inquiry has been submitted successfully. Our executive will contact you soon based on your query."
+            }
+          </Typography>
+        </DialogContent>
+        <DialogActions sx={{ justifyContent: "center", pb: 3, px: 3 }}>
+          <Button
+            onClick={handleCloseSuccessDialog}
+            variant="contained"
+            sx={{
+              background: "linear-gradient(135deg, #0035B3 0%, #002a8f 100%)",
+              color: "white",
+              fontWeight: "600",
+              px: 4,
+              py: 1.5,
+              borderRadius: "10px",
+              textTransform: "none",
+              fontSize: "1rem",
+              boxShadow: "0 4px 12px rgba(0, 53, 179, 0.3)",
+              "&:hover": {
+                background: "linear-gradient(135deg, #002a8f 0%, #001f6b 100%)",
+                transform: "translateY(-1px)",
+                boxShadow: "0 6px 16px rgba(0, 53, 179, 0.4)",
+              },
+            }}
+          >
+            Got it!
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 };
