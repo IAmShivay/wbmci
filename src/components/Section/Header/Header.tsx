@@ -42,7 +42,7 @@ const Header: React.FC = () => {
             width: "100%",
             maxWidth: "1400px",
             margin: "0 auto",
-            px: { xs: 0.3, sm: 1.2, md: 2.2, lg: 3.2 },
+            px: { xs: 1, sm: 1.5, md: 2.5, lg: 3.5 },
             py: { xs: 0.8, sm: 1.2, md: 1.8 },
             minHeight: { xs: "60px", sm: "70px", md: "80px" },
             gap: { xs: 1, sm: 2, md: 3 },
@@ -125,13 +125,12 @@ const Header: React.FC = () => {
             sx={{
               display: "flex",
               alignItems: "center",
-              gap: { xs: 0.2, sm: 0.6, md: 1 },
+              gap: { xs: 0.5, sm: 0.8, md: 1.2 },
               flexGrow: 1,
               justifyContent: "flex-end",
-              pr: { xs: 0, sm: 0.2, md: 0.6 },
-              flexShrink: 1,
-              minWidth: { xs: "50px", sm: "75px", md: "95px" },
-              maxWidth: { xs: "55px", sm: "85px", md: "110px" },
+              pr: { xs: 0, sm: 0.5, md: 1 },
+              flexShrink: 0,
+              minWidth: { xs: "auto", sm: "auto", md: "auto" },
             }}
           >
             {/* NEET Updates Button */}
@@ -224,7 +223,7 @@ const Header: React.FC = () => {
         <Stack direction="column" spacing={1.5} alignItems="center">
           {/* WhatsApp Button */}
           <IconButton
-            href="https://wa.me/918420461369"
+            href="https://wa.me/919046228190"
             target="_blank"
             sx={{
               background: "linear-gradient(135deg, #25D366 0%, #128C7E 100%)",

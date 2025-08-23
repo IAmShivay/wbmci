@@ -119,10 +119,14 @@ const HospitalCards: React.FC = () => {
       <Box
         sx={{
           width: "100%",
-          py: { xs: 4, sm: 5, md: 6, lg: 7 },
-          px: { xs: 1, sm: 2, md: 3, lg: 4 },
+          py: { xs: 2, sm: 4, md: 5, lg: 6 },
+          px: { xs: 1, sm: 3, md: 4, lg: 5 },
           backgroundColor: "#f8f9fa",
           minHeight: { xs: "auto", sm: "600px", md: "700px" },
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
         }}
       >
         <Box
@@ -130,15 +134,56 @@ const HospitalCards: React.FC = () => {
             maxWidth: "1600px",
             margin: "0 auto",
             width: "100%",
+            px: { xs: 0, sm: 1, md: 2 },
           }}
         >
+          {/* Header Section */}
+          <Box
+            sx={{
+              textAlign: "center",
+              mb: { xs: 3, sm: 5, md: 6 },
+              px: { xs: 1, sm: 3, md: 4 },
+            }}
+          >
+            <Typography
+              variant="h3"
+              component="h2"
+              sx={{
+                fontWeight: "bold",
+                color: "#0035B3",
+                mb: { xs: 2, sm: 2.5, md: 3 },
+                fontSize: { xs: "1.8rem", sm: "2.2rem", md: "2.5rem", lg: "3rem" },
+                textShadow: "0 2px 4px rgba(0, 53, 179, 0.1)",
+                lineHeight: { xs: 1.2, sm: 1.3, md: 1.4 },
+              }}
+            >
+              Our Partner Hospitals & Institutes
+            </Typography>
+            <Typography
+              variant="h6"
+              sx={{
+                color: "#666",
+                maxWidth: { xs: "100%", sm: "600px", md: "800px" },
+                mx: "auto",
+                fontSize: { xs: "0.9rem", sm: "1rem", md: "1.1rem" },
+                lineHeight: { xs: 1.5, sm: 1.6, md: 1.7 },
+                px: { xs: 1, sm: 2 },
+              }}
+            >
+              Discover excellence in medical education and healthcare through our
+              trusted network of premier institutions
+            </Typography>
+          </Box>
+
           <Grid
             container
-            spacing={{ xs: 2, sm: 3, md: 4 }}
+            spacing={{ xs: 1.5, sm: 3, md: 4 }}
             justifyContent="center"
+            alignItems="stretch"
             sx={{
               width: "100%",
               margin: 0,
+              px: { xs: 0, sm: 2, md: 3 },
             }}
           >
           {hospitals.map((hospital, index) => (
@@ -149,17 +194,21 @@ const HospitalCards: React.FC = () => {
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
+                style={{ width: "100%", height: "100%" }}
               >
                 <Card
                   sx={{
-                    height: { xs: 280, sm: 320, md: 350, lg: 380 },
+                    width: "100%",
+                    height: { xs: 300, sm: 340, md: 370, lg: 400 },
                     cursor: "pointer",
                     position: "relative",
                     overflow: "hidden",
-                    borderRadius: { xs: 2, sm: 3, md: 4 },
+                    borderRadius: { xs: "12px", sm: "16px", md: "20px" },
                     boxShadow: "0 4px 20px rgba(0, 53, 179, 0.1)",
                     border: "1px solid rgba(0, 53, 179, 0.05)",
                     transition: "all 0.3s ease",
+                    display: "flex",
+                    flexDirection: "column",
                     "&:hover": {
                       boxShadow: "0 8px 30px rgba(0, 53, 179, 0.2)",
                       transform: "translateY(-4px)",
@@ -241,19 +290,24 @@ const HospitalCards: React.FC = () => {
                         zIndex: 2,
                         color: "white",
                         width: "100%",
-                        p: { xs: 2, sm: 2.5, md: 3 },
+                        p: { xs: 2, sm: 2.5, md: 3, lg: 3.5 },
                         background: "transparent",
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "flex-end",
+                        minHeight: { xs: "120px", sm: "140px", md: "160px" },
                       }}
                     >
                       <Typography
-                        variant={isMobile ? "h6" : isTablet ? "h5" : "h5"}
+                        variant="h5"
                         component="h3"
                         sx={{
                           fontWeight: "bold",
-                          mb: { xs: 1, sm: 1.5 },
-                          fontSize: { xs: "1.1rem", sm: "1.3rem", md: "1.4rem" },
+                          mb: { xs: 1, sm: 1.5, md: 2 },
+                          fontSize: { xs: "1.1rem", sm: "1.3rem", md: "1.4rem", lg: "1.5rem" },
                           textShadow: "0 2px 8px rgba(0, 0, 0, 0.8), 0 1px 4px rgba(0, 0, 0, 0.6)",
-                          lineHeight: { xs: 1.2, md: 1.3 },
+                          lineHeight: { xs: 1.2, sm: 1.25, md: 1.3 },
+                          textAlign: { xs: "center", sm: "left" },
                         }}
                       >
                         {hospital.name}
@@ -262,13 +316,15 @@ const HospitalCards: React.FC = () => {
                         variant="body2"
                         sx={{
                           opacity: 0.95,
-                          lineHeight: { xs: 1.4, md: 1.5 },
-                          fontSize: { xs: "0.85rem", sm: "0.9rem", md: "0.95rem" },
+                          lineHeight: { xs: 1.4, sm: 1.45, md: 1.5 },
+                          fontSize: { xs: "0.85rem", sm: "0.9rem", md: "0.95rem", lg: "1rem" },
                           textShadow: "0 2px 6px rgba(0, 0, 0, 0.8), 0 1px 3px rgba(0, 0, 0, 0.6)",
                           display: "-webkit-box",
-                          WebkitLineClamp: { xs: 3, sm: 4 },
+                          WebkitLineClamp: { xs: 3, sm: 4, md: 4 },
                           WebkitBoxOrient: "vertical",
                           overflow: "hidden",
+                          textAlign: { xs: "center", sm: "left" },
+                          px: { xs: 1, sm: 0 },
                         }}
                       >
                         {hospital.description}
@@ -410,13 +466,86 @@ const HospitalCards: React.FC = () => {
               color: "#555",
               fontSize: "1.1rem",
               lineHeight: 1.6,
+              mb: 2,
             }}
           >
             {hasSubmittedForm && modalOpen === false
-              ? "Thank you for your interest! Our executive will contact you soon regarding your previous inquiry."
-              : "Your inquiry has been submitted successfully. Our executive will contact you soon based on your query."
+              ? "Thank you for your interest! Our executive will contact you ASAP regarding your previous inquiry."
+              : "Your inquiry has been submitted successfully. Our executive will contact you ASAP based on your query."
             }
           </Typography>
+
+          <Typography
+            variant="body2"
+            sx={{
+              textAlign: "center",
+              color: "#666",
+              fontSize: "1rem",
+              lineHeight: 1.5,
+              mb: 2,
+            }}
+          >
+            Meanwhile, if you want you can reach out to us on given numbers:
+          </Typography>
+
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: 1,
+              p: 2,
+              backgroundColor: "#f8f9fa",
+              borderRadius: "12px",
+              border: "1px solid #e9ecef",
+            }}
+          >
+            <Typography
+              component="a"
+              href="tel:+919432325829"
+              sx={{
+                color: "#0035B3",
+                fontSize: "1.1rem",
+                fontWeight: "600",
+                textDecoration: "none",
+                "&:hover": {
+                  textDecoration: "underline",
+                },
+              }}
+            >
+              📞 +91 94323 25829
+            </Typography>
+            <Typography
+              component="a"
+              href="tel:+917477798949"
+              sx={{
+                color: "#0035B3",
+                fontSize: "1.1rem",
+                fontWeight: "600",
+                textDecoration: "none",
+                "&:hover": {
+                  textDecoration: "underline",
+                },
+              }}
+            >
+              📞 +91 74777 98949
+            </Typography>
+            <Typography
+              component="a"
+              href="tel:+918961212702"
+              sx={{
+                color: "#0035B3",
+                fontSize: "1.1rem",
+                fontWeight: "600",
+                textDecoration: "none",
+                "&:hover": {
+                  textDecoration: "underline",
+                },
+              }}
+            >
+              📞 +91 89612 12702
+            </Typography>
+          </Box>
         </DialogContent>
         <DialogActions sx={{ justifyContent: "center", pb: 3, px: 3 }}>
           <Button
