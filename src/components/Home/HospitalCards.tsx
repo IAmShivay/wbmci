@@ -81,7 +81,6 @@ const HospitalCards: React.FC = () => {
   });
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const isTablet = useMediaQuery(theme.breakpoints.between("sm", "md"));
 
   const handleCardClick = (hospital: Hospital) => {
     setSelectedHospital(hospital);
