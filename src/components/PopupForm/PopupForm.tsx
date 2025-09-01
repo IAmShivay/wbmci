@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo, useEffect } from "react";
+import React, { useState, useCallback, useMemo } from "react";
 import {
   TextField,
   Button,
@@ -162,10 +162,11 @@ const StandaloneForm: React.FC<StandaloneFormProps> = ({ onSubmitSuccess }) => {
           if (typeof errorPayload === 'string') {
             errorMessage = errorPayload;
           } else if (errorPayload && typeof errorPayload === 'object') {
-            if (errorPayload.message) {
-              errorMessage = errorPayload.message;
-            } else if (errorPayload.error) {
-              errorMessage = errorPayload.error;
+            const payload = errorPayload as any;
+            if (payload.message) {
+              errorMessage = payload.message;
+            } else if (payload.error) {
+              errorMessage = payload.error;
             }
           }
 
