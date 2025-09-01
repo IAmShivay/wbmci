@@ -120,6 +120,31 @@ const Header: React.FC = () => {
             </Box>
           </Box>
 
+          {/* Phone Number Display */}
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              ml: { xs: 1, sm: 2, md: 3 },
+              flexShrink: 0,
+            }}
+          >
+            <Typography
+              sx={{
+                color: "#0035B3",
+                fontWeight: "600",
+                fontSize: { xs: "0.9rem", sm: "1rem", md: "1.1rem" },
+                fontFamily: "'Inter', 'Roboto', sans-serif",
+                letterSpacing: "0.5px",
+                display: "flex",
+                alignItems: "center",
+                gap: 0.5,
+              }}
+            >
+              📞 9046228190
+            </Typography>
+          </Box>
+
           {/* Right Side Navigation */}
           <Box
             sx={{
@@ -223,7 +248,7 @@ const Header: React.FC = () => {
         <Stack direction="column" spacing={1.5} alignItems="center">
           {/* WhatsApp Button */}
           <IconButton
-            href="https://wa.me/919046228190"
+            href="https://wa.me/918670121414"
             target="_blank"
             sx={{
               background: "linear-gradient(135deg, #25D366 0%, #128C7E 100%)",
@@ -246,7 +271,7 @@ const Header: React.FC = () => {
 
           {/* Phone Button 1 */}
           <IconButton
-            href="tel:+917477798949"
+            href="tel:+917477798950"
             sx={{
               background: "linear-gradient(135deg, #0035B3 0%, #002a8f 100%)",
               color: "white",

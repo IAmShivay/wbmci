@@ -501,21 +501,6 @@ const HospitalCards: React.FC = () => {
           >
             <Typography
               component="a"
-              href="tel:+919432325829"
-              sx={{
-                color: "#0035B3",
-                fontSize: "1.1rem",
-                fontWeight: "600",
-                textDecoration: "none",
-                "&:hover": {
-                  textDecoration: "underline",
-                },
-              }}
-            >
-              📞 +91 94323 25829
-            </Typography>
-            <Typography
-              component="a"
               href="tel:+917477798949"
               sx={{
                 color: "#0035B3",
@@ -531,7 +516,7 @@ const HospitalCards: React.FC = () => {
             </Typography>
             <Typography
               component="a"
-              href="tel:+918961212702"
+              href="tel:+917477798950"
               sx={{
                 color: "#0035B3",
                 fontSize: "1.1rem",
@@ -542,7 +527,22 @@ const HospitalCards: React.FC = () => {
                 },
               }}
             >
-              📞 +91 89612 12702
+              📞 +91 74777 98950
+            </Typography>
+            <Typography
+              component="a"
+              href="tel:+917063592396"
+              sx={{
+                color: "#0035B3",
+                fontSize: "1.1rem",
+                fontWeight: "600",
+                textDecoration: "none",
+                "&:hover": {
+                  textDecoration: "underline",
+                },
+              }}
+            >
+              📞 +91 70635 92396
             </Typography>
           </Box>
         </DialogContent>
