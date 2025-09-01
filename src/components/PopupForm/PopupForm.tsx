@@ -17,12 +17,6 @@ import { AppDispatch } from "../../store";
 import { useDispatch } from "react-redux";
 import { toast } from "react-hot-toast";
 import { states } from "./state";
-import { auth } from "../../firebase/firebaseConfig";
-import {
-  RecaptchaVerifier,
-  signInWithPhoneNumber,
-  ConfirmationResult,
-} from "firebase/auth";
 
 interface FormData {
   name: string;
@@ -30,13 +24,11 @@ interface FormData {
   phoneNumber: string;
   course: string;
   place: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
-declare global {
-  interface Window {
-    recaptchaVerifier: RecaptchaVerifier;
-  }
-}
+
 
 const theme = createTheme({
   palette: {
@@ -67,12 +59,6 @@ const StandaloneForm: React.FC<StandaloneFormProps> = ({ onSubmitSuccess }) => {
   });
   const [phoneError, setPhoneError] = useState<string | null>(null);
   const [emailError, setEmailError] = useState<string | null>(null);
-  const [otpSent, setOtpSent] = useState(false);
-  const [otp, setOtp] = useState("");
-  const [confirmationResult, setConfirmationResult] =
-    useState<ConfirmationResult | null>(null);
-  const [isPhoneVerified, setIsPhoneVerified] = useState(false);
-  const [verificationInProgress, setVerificationInProgress] = useState(false);
 
   const handleChange = useCallback(
     (
@@ -103,85 +89,57 @@ const StandaloneForm: React.FC<StandaloneFormProps> = ({ onSubmitSuccess }) => {
     []
   );
 
-  const setupRecaptcha = useCallback(() => {
-    if (!window.recaptchaVerifier) {
-      window.recaptchaVerifier = new RecaptchaVerifier(
-        auth,
-        "recaptcha-container",
-        {
-          size: "invisible",
-        }
-      );
-    }
-  }, []);
 
-  const sendOtp = useCallback(async () => {
-    if (!phoneError && formData.phoneNumber) {
-      try {
-        setVerificationInProgress(true);
-        setupRecaptcha();
-        const phoneNumber = "+91" + formData.phoneNumber;
-        const appVerifier = window.recaptchaVerifier;
-        const confirmation = await signInWithPhoneNumber(
-          auth,
-          phoneNumber,
-          appVerifier
-        );
-        setConfirmationResult(confirmation);
-        setOtpSent(true);
-        toast.success("OTP sent successfully!");
-      } catch (error) {
-        console.error("Error sending OTP:", error);
-        toast.error("Failed to send OTP. Please try again.");
-      } finally {
-        setVerificationInProgress(false);
-      }
-    }
-  }, [phoneError, formData.phoneNumber, setupRecaptcha]);
-
-  const verifyOtp = useCallback(async () => {
-    if (confirmationResult && otp) {
-      try {
-        setVerificationInProgress(true);
-        await confirmationResult.confirm(otp);
-        toast.success("Phone number verified successfully!");
-        setIsPhoneVerified(true);
-      } catch (error) {
-        console.error("Error verifying OTP:", error);
-        toast.error("Invalid OTP. Please try again.");
-      } finally {
-        setVerificationInProgress(false);
-      }
-    }
-  }, [confirmationResult, otp]);
-
-  useEffect(() => {
-    if (!phoneError && formData.phoneNumber.length === 10 && !otpSent) {
-      sendOtp();
-    }
-  }, [formData.phoneNumber, phoneError, otpSent, sendOtp]);
-
-  useEffect(() => {
-    if (otp.length === 6 && !isPhoneVerified) {
-      verifyOtp();
-    }
-  }, [otp, isPhoneVerified, verifyOtp]);
 
   const handleSubmit = useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      if (
-        !phoneError &&
-        formData.name &&
-        formData.email &&
-        formData.phoneNumber &&
-        formData.course &&
-        formData.place &&
-        isPhoneVerified
-      ) {
-        try {
-          await dispatch(leadRegister(formData));
-          toast.success("Form submitted successfully!");
+
+      // Validate form fields
+      if (!formData.name.trim()) {
+        toast.error("Please enter your name");
+        return;
+      }
+      if (!formData.email.trim()) {
+        toast.error("Please enter your email");
+        return;
+      }
+      if (emailError) {
+        toast.error("Please enter a valid email address");
+        return;
+      }
+      if (!formData.phoneNumber.trim()) {
+        toast.error("Please enter your phone number");
+        return;
+      }
+      if (phoneError) {
+        toast.error("Please enter a valid phone number");
+        return;
+      }
+      if (!formData.course) {
+        toast.error("Please select a course");
+        return;
+      }
+      if (!formData.place) {
+        toast.error("Please select your place");
+        return;
+      }
+
+      try {
+        // Add timestamps to form data
+        const currentTimestamp = new Date().toISOString();
+        const formDataWithTimestamps = {
+          ...formData,
+          createdAt: currentTimestamp,
+          updatedAt: currentTimestamp,
+        };
+
+        const result = await dispatch(leadRegister(formDataWithTimestamps));
+
+        if (leadRegister.fulfilled.match(result)) {
+          toast.success("Form submitted successfully! Our team will contact you soon.");
+
+          // Reset form
           setFormData({
             name: "",
             email: "",
@@ -189,40 +147,49 @@ const StandaloneForm: React.FC<StandaloneFormProps> = ({ onSubmitSuccess }) => {
             course: "",
             place: "",
           });
-          setOtpSent(false);
-          setOtp("");
-          setIsPhoneVerified(false);
 
           // Call the success callback if provided
           if (onSubmitSuccess) {
             setTimeout(() => {
               onSubmitSuccess();
-            }, 1500); // Delay to show success message
+            }, 1500);
           }
-        } catch (err: any) {
-          toast.error(err.message || "Something went wrong. Please try again.");
+        } else if (leadRegister.rejected.match(result)) {
+          // Handle specific error cases
+          const errorPayload = result.payload;
+          let errorMessage = "Something went wrong. Please try again.";
+
+          if (typeof errorPayload === 'string') {
+            errorMessage = errorPayload;
+          } else if (errorPayload && typeof errorPayload === 'object') {
+            if (errorPayload.message) {
+              errorMessage = errorPayload.message;
+            } else if (errorPayload.error) {
+              errorMessage = errorPayload.error;
+            }
+          }
+
+          toast.error(errorMessage);
         }
-      } else {
-        toast.error(
-          "Please fill out the form correctly and verify your phone number."
-        );
+      } catch (err: any) {
+        console.error("Form submission error:", err);
+        toast.error("Network error. Please check your connection and try again.");
       }
     },
-    [dispatch, formData, isPhoneVerified, phoneError, onSubmitSuccess]
+    [dispatch, formData, phoneError, emailError, onSubmitSuccess]
   );
 
   const isFormValid = useMemo(() => {
     return (
       !phoneError &&
       !emailError &&
-      formData.name &&
-      formData.email &&
-      formData.phoneNumber &&
+      formData.name.trim() &&
+      formData.email.trim() &&
+      formData.phoneNumber.trim() &&
       formData.course &&
-      formData.place &&
-      isPhoneVerified
+      formData.place
     );
-  }, [emailError, formData, isPhoneVerified, phoneError]);
+  }, [emailError, formData, phoneError]);
 
   return (
     <ThemeProvider theme={theme}>
@@ -289,47 +256,7 @@ const StandaloneForm: React.FC<StandaloneFormProps> = ({ onSubmitSuccess }) => {
           required
           sx={{ mb: 2 }}
         />
-        {otpSent && !isPhoneVerified && (
-          <Box mt={2} mb={2}>
-            <TextField
-              margin="normal"
-              name="otp"
-              label="Enter OTP"
-              type="text"
-              fullWidth
-              variant="outlined"
-              value={otp}
-              onChange={(e) => setOtp(e.target.value)}
-              sx={{ mb: 2 }}
-            />
-          </Box>
-        )}
-        {verificationInProgress && (
-          <Typography color="primary" mt={2} mb={2}>
-            Processing...
-          </Typography>
-        )}
-        {isPhoneVerified && (
-          <Typography
-            color="secondary"
-            mt={2}
-            mb={2}
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            Verified!{" "}
-            <span
-              role="img"
-              aria-label="verified"
-              style={{ marginLeft: "8px" }}
-            >
-              📞✅
-            </span>
-          </Typography>
-        )}
+
         <FormControl fullWidth margin="normal" sx={{ mb: 2 }}>
           <InputLabel id="course-label">Course</InputLabel>
           <Select
@@ -389,7 +316,6 @@ const StandaloneForm: React.FC<StandaloneFormProps> = ({ onSubmitSuccess }) => {
           Submit
         </Button>
       </Box>
-      <div id="recaptcha-container"></div>
     </ThemeProvider>
   );
 };

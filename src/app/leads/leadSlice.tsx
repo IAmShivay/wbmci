@@ -11,7 +11,8 @@ interface Credentials {
   place:string,
   college?:string,
   leads?:[]
-  createdAt?:any
+  createdAt?:string,
+  updatedAt?:string
 }
 
 interface leadState {

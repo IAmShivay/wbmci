@@ -72,7 +72,15 @@ const ContactUs: React.FC = () => {
       formData.place
     ) {
       try {
-        await dispatch(leadRegister(formData));
+        // Add timestamps to form data
+        const currentTimestamp = new Date().toISOString();
+        const formDataWithTimestamps = {
+          ...formData,
+          createdAt: currentTimestamp,
+          updatedAt: currentTimestamp,
+        };
+
+        await dispatch(leadRegister(formDataWithTimestamps));
         toast.success("Form submitted successfully!");
         setShowConfirmation(true);
         setFormData({

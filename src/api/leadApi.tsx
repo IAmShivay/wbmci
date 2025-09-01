@@ -4,6 +4,11 @@ interface Credentials {
   name: string;
   email: string;
   phoneNumber: string;
+  course?: string;
+  place?: string;
+  college?: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 const API_URL = import.meta.env.VITE_API_URL;
 
